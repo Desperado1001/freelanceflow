@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/freelanceflow/',
-  // GitHub Pages 需要确保路由正确工作
+  // 在Vercel上使用根路径
+  base: '/',
   build: {
     outDir: 'dist',
   },
