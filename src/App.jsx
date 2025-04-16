@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useEffect, useState } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { AppProvider } from './contexts/AppContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 // Layout
 import Layout from './components/layout/Layout';
@@ -21,6 +22,10 @@ import TimeSheet from './components/time/TimeSheet';
 import InvoiceList from './components/invoices/InvoiceList';
 import InvoiceDetail from './components/invoices/InvoiceDetail';
 import InvoiceForm from './components/invoices/InvoiceForm';
+import ClientList from './components/clients/ClientList';
+import ClientDetail from './components/clients/ClientDetail';
+import NewClient from './components/clients/NewClient';
+import Reports from './components/reports/Reports';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -45,43 +50,49 @@ function App() {
   
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex items-center justify-center h-screen dark:bg-dark-bg">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
       </div>
     );
   }
   
   return (
-    <AuthProvider>
-      <AppProvider>
-        <Router basename="/freelanceflow">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            <Route 
-              path="/" 
-              element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Dashboard />} />
-              <Route path="projects" element={<ProjectList />} />
-              <Route path="projects/new" element={<NewProject />} />
-              <Route path="projects/:id" element={<ProjectDetail />} />
-              <Route path="tasks" element={<TaskList />} />
-              <Route path="time-tracker" element={<TimeTracker />} />
-              <Route path="timesheet" element={<TimeSheet />} />
-              <Route path="invoices" element={<InvoiceList />} />
-              <Route path="invoices/new" element={<InvoiceForm />} />
-              <Route path="invoices/:id" element={<InvoiceDetail />} />
-            </Route>
-          </Routes>
-        </Router>
-      </AppProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppProvider>
+          <Router basename="/freelanceflow">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              
+              <Route 
+                path="/" 
+                element={
+                  <ProtectedRoute>
+                    <Layout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Dashboard />} />
+                <Route path="projects" element={<ProjectList />} />
+                <Route path="projects/new" element={<NewProject />} />
+                <Route path="projects/:id" element={<ProjectDetail />} />
+                <Route path="tasks" element={<TaskList />} />
+                <Route path="clients" element={<ClientList />} />
+                <Route path="clients/new" element={<NewClient />} />
+                <Route path="clients/:id" element={<ClientDetail />} />
+                <Route path="time-tracker" element={<TimeTracker />} />
+                <Route path="timesheet" element={<TimeSheet />} />
+                <Route path="invoices" element={<InvoiceList />} />
+                <Route path="invoices/new" element={<InvoiceForm />} />
+                <Route path="invoices/:id" element={<InvoiceDetail />} />
+                <Route path="reports" element={<Reports />} />
+              </Route>
+            </Routes>
+          </Router>
+        </AppProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
