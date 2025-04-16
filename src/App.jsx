@@ -60,7 +60,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <AppProvider>
-          <Router basename="/freelanceflow">
+          <Router basename="/">
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
