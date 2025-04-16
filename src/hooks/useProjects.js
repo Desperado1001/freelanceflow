@@ -8,6 +8,15 @@ export const useProjects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
+        // 检查本地存储中是否有项目数据
+        const savedProjects = localStorage.getItem('projects');
+        
+        if (savedProjects) {
+          setProjects(JSON.parse(savedProjects));
+          setLoading(false);
+          return;
+        }
+        
         // 模拟API调用
         await new Promise(resolve => setTimeout(resolve, 500));
         
@@ -16,7 +25,8 @@ export const useProjects = () => {
           {
             id: 1,
             name: '企业网站重构',
-            client: 'ABC科技有限公司',
+            client: 1, // 客户ID
+            clientName: 'ABC科技有限公司', // 冗余存储客户名称以方便显示
             status: 'active',
             dueDate: '2025-05-15',
             budget: 12000,
@@ -27,7 +37,8 @@ export const useProjects = () => {
           {
             id: 2,
             name: 'App界面设计',
-            client: '健康生活应用',
+            client: 2,
+            clientName: '健康生活应用',
             status: 'active',
             dueDate: '2025-04-30',
             budget: 8000,
@@ -38,7 +49,8 @@ export const useProjects = () => {
           {
             id: 3,
             name: 'Logo设计包',
-            client: '新创咖啡店',
+            client: 3,
+            clientName: '新创咖啡店',
             status: 'completed',
             dueDate: '2025-03-20',
             budget: 3200,
@@ -49,6 +61,8 @@ export const useProjects = () => {
         ];
         
         setProjects(mockProjects);
+        // 保存到本地存储
+        localStorage.setItem('projects', JSON.stringify(mockProjects));
       } catch (err) {
         setError(err);
       } finally {
@@ -68,24 +82,43 @@ export const useProjects = () => {
       hours: 0
     };
     
-    setProjects([...projects, newProject]);
+    const updatedProjects = [...projects, newProject];
+    setProjects(updatedProjects);
+    
+    // 更新本地存储
+    localStorage.setItem('projects', JSON.stringify(updatedProjects));
+    
     return newProject;
   };
   
   const updateProject = (id, updates) => {
     // 在实际应用中，这里会调用API更新项目
-    setProjects(projects.map(project => 
+    const updatedProjects = projects.map(project => 
       project.id === id ? { ...project, ...updates } : project
-    ));
+    );
+    
+    setProjects(updatedProjects);
+    
+    // 更新本地存储
+    localStorage.setItem('projects', JSON.stringify(updatedProjects));
   };
   
   const deleteProject = (id) => {
     // 在实际应用中，这里会调用API删除项目
-    setProjects(projects.filter(project => project.id !== id));
+    const updatedProjects = projects.filter(project => project.id !== id);
+    
+    setProjects(updatedProjects);
+    
+    // 更新本地存储
+    localStorage.setItem('projects', JSON.stringify(updatedProjects));
   };
   
   const getProject = (id) => {
     return projects.find(project => project.id === parseInt(id));
+  };
+  
+  const getProjectsByClient = (clientId) => {
+    return projects.filter(project => project.client === clientId);
   };
   
   return {
@@ -95,6 +128,7 @@ export const useProjects = () => {
     addProject,
     updateProject,
     deleteProject,
-    getProject
+    getProject,
+    getProjectsByClient
   };
 };
